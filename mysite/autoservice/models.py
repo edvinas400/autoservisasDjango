@@ -33,8 +33,16 @@ class Uzsakymas(models.Model):
     data = models.DateField("Data")
     automobilis = models.ForeignKey("Automobilis", on_delete=models.CASCADE)
 
+    def display_suma(self):
+        sum = 0
+        for eilute in self.eilute.all():
+            sum+=eilute.display_kaina()
+        return sum
+
+    display_suma.short_description = 'Suma'
+
     def __str__(self):
-        return f"{self.automobilis} {self.data}"
+        return f"{self.automobilis}"
 
     class Meta:
         verbose_name = "Uzsakymas"
@@ -57,6 +65,11 @@ class UzsakymoEilute(models.Model):
     paslauga = models.ForeignKey("Paslauga", on_delete=models.CASCADE)
     uzsakymas = models.ForeignKey("Uzsakymas", on_delete=models.CASCADE, related_name="eilute")
     kiekis = models.IntegerField("Kiekis", help_text="Kiekis")
+
+    def display_kaina(self):
+        return self.kiekis * self.paslauga.kaina
+
+    display_kaina.short_description = 'Kaina'
 
     def __str__(self):
         return f"{self.uzsakymas} {self.paslauga}"
