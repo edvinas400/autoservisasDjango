@@ -30,12 +30,12 @@ class Automobilis(models.Model):
 
 
 class Uzsakymas(models.Model):
-    data = models.DateField("Data")
+    data = models.DateTimeField("Data")
     automobilis = models.ForeignKey("Automobilis", on_delete=models.CASCADE)
 
     def display_suma(self):
         sum = 0
-        for eilute in self.eilute.all():
+        for eilute in self.eilutes.all():
             sum+=eilute.display_kaina()
         return sum
 
@@ -63,7 +63,7 @@ class Paslauga(models.Model):
 
 class UzsakymoEilute(models.Model):
     paslauga = models.ForeignKey("Paslauga", on_delete=models.CASCADE)
-    uzsakymas = models.ForeignKey("Uzsakymas", on_delete=models.CASCADE, related_name="eilute")
+    uzsakymas = models.ForeignKey("Uzsakymas", on_delete=models.CASCADE, related_name="eilutes")
     kiekis = models.IntegerField("Kiekis", help_text="Kiekis")
 
     def display_kaina(self):
