@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Uzsakymai{% endblock %}
+
+{% block content %}
+<h2>Uzsakymo informacija</h2>
+<p><b>Data:</b> {{ uzsakymas.data }}</p>
+<p><b>Automobilis:</b> {{ uzsakymas.automobilis }}</p>
+<p><b>Statusas:</b><span class="{% if uzsakymas.statusas == 'a' %}text-success{% elif uzsakymas.status == 't' %}text-danger{% else %}text-warning{% endif %}"> {{ uzsakymas.get_statusas_display }} </span></p>
+<table class="table table-bordered table-sm">
+    <thead>
+      <tr>
+        <th><b>Paslauga</b></th>
+        <th><b>Paslaugos kaina</b></th>
+        <th><b>Kiekis</b></th>
+          <th><b>Suma</b></th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for eilute in uzsakymas.eilutes.all %}
+      <tr>
+        <td>{{eilute.paslauga}}</td>
+        <td>{{eilute.paslauga.kaina}}</td>
+        <td>{{eilute.kiekis}}</td>
+          <td>{{eilute.display_kaina}}</td>
+      </tr>
+    {% endfor %}
+      <tr>
+        <td colspan = 3><b>Bendra suma:</b></td>
+          <td>{{ uzsakymas.display_suma }}</td>
+      </tr>
+    </tbody>
+  </table>
+{% endblock %}

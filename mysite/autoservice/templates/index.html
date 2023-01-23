@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}HOME{% endblock %}
+
+{% block content %}
+<h2>Informacija</h2>
+<ul>
+    <li>Paslaugu: {{ paslaugu_kiekis }}</li>
+    <li>Uzsakymu: {{ uzsakymu_kiekis }}</li>
+    <li>Atliktu uzsakymu: {{ atlikti_uzsakymai }}</li>
+    <li>Automobiliu: {{ automobiliu_kiekis }}</li>
+</ul>
+{% endblock %}

@@ -20,7 +20,7 @@ class Automobilis(models.Model):
     automobilis = models.ForeignKey("AutomobilioModelis", on_delete=models.SET_NULL, null=True)
     vin_kodas = models.CharField("VIN kodas", max_length=200, help_text="VIN kodas")
     klientas = models.CharField("Klientas", max_length=200, help_text="Klientas")
-
+    cover = models.ImageField('Nuotrauka', upload_to='foto', null=True, blank=True)
     def __str__(self):
         return f"{self.automobilis} {self.valstybinis_nr}"
 
@@ -32,7 +32,13 @@ class Automobilis(models.Model):
 class Uzsakymas(models.Model):
     data = models.DateTimeField("Data")
     automobilis = models.ForeignKey("Automobilis", on_delete=models.CASCADE)
-
+    STATUSAS = (
+        ('a', 'Atlikta'),
+        ('p', 'Patvirtinta'),
+        ('v', 'Vykdoma'),
+        ('t', 'Atsaukta'),
+    )
+    statusas = models.CharField(max_length = 1, choices=STATUSAS, default= "p", blank=True, help_text="Statusas")
     def display_suma(self):
         sum = 0
         for eilute in self.eilutes.all():

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Uzsakymai{% endblock %}
+
+{% block content %}
+{% load static %}
+<h2>Uzsakymai</h2>
+<p>Turimu uzsakymu sarasas:</p>
+<ul>
+    {% for uzsakymas in uzsakymai %}
+    <div class="col-md-4 d-flex align-items-stretch">
+        <div>
+            {% if uzsakymas.automobilis.cover %}
+            <img src="{{ uzsakymas.automobilis.cover.url }}" class="card-img-top" alt="...">
+            {% else %}
+            <img src="{% static 'img/no-image.png' %}" class="card-img-top">
+            {% endif %}
+        </div>
+    </div>
+    <li><a href="{{ uzsakymas.id }}">{{uzsakymas}}</a></li>
+    {% endfor %}
+</ul>
+<div class="container">
+    <nav aria-label="...">
+        {% if page_obj.has_other_pages %}
+        <ul class="pagination pagination-sm">
+            {% for i in page_obj.paginator.page_range %}
+            {% if page_obj.number == i %}
+            <li class="page-item active">
+                <a class="page-link">{{ i }}</a>
+            </li>
+            {% else %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+            </li>
+            {% endif %}
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </nav>
+</div>
+{% endblock %}

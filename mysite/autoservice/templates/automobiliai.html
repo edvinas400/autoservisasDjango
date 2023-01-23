@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Uzsakymai{% endblock %}
+
+{% block content %}
+{% load static %}
+<h2>Automobiliai</h2>
+<p>Siuo metu turimi automobiliai:</p>
+<ul>
+    {% for automobilis in automobiliai %}
+    <div class="col-md-4 d-flex align-items-stretch">
+        <div>
+            {% if automobilis.cover %}
+            <img src="{{ automobilis.cover.url }}" class="card-img-top" alt="...">
+            {% else %}
+            <img src="{% static 'img/no-image.png' %}" class="card-img-top">
+            {% endif %}
+        </div>
+    </div>
+    <li><a href="{% url 'automobilis' automobilis.id %}">{{automobilis}}</a></li>
+    {% endfor %}
+</ul>
+<div class="container">
+    <nav aria-label="...">
+        {% if automobiliai.has_other_pages %}
+        <ul class="pagination pagination-sm">
+            {% for i in automobiliai.paginator.page_range %}
+            {% if automobiliai.number == i %}
+            <li class="page-item active">
+                <a class="page-link">{{ i }}</a>
+            </li>
+            {% else %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+            </li>
+            {% endif %}
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </nav>
+</div>
+{% endblock %}

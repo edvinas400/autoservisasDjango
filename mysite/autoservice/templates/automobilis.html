@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Uzsakymai{% endblock %}
+
+{% block content %}
+{% load static %}
+<h2>Automobilio informacija</h2>
+<div class="col-md-4 d-flex align-items-stretch">
+    <div>
+        {% if automobilis.cover %}
+        <img src="{{ automobilis.cover.url }}" class="card-img-top" alt="...">
+        {% else %}
+        <img src="{% static 'img/no-image.png' %}" class="card-img-top">
+        {% endif %}
+    </div>
+</div>
+<p><b>Savininkas:</b> {{ automobilis.klientas }}</p>
+<p><b>Modelis:</b> {{ automobilis.automobilis }}</p>
+<p><b>Valstybinis numeris:</b> {{ automobilis.valstybinis_nr }}</p>
+<p><b>VIN kodas:</b> {{ automobilis.vin_kodas }}</p>
+{% endblock %}
