@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import date
+from tinymce.models import HTMLField
 
 
 # Create your models here.
@@ -23,7 +24,7 @@ class Automobilis(models.Model):
     vin_kodas = models.CharField("VIN kodas", max_length=200, help_text="VIN kodas")
     klientas = models.CharField("Klientas", max_length=200, help_text="Klientas")
     cover = models.ImageField('Nuotrauka', upload_to='foto', null=True, blank=True)
-
+    aprasymas = HTMLField(null = True, blank = True)
     def __str__(self):
         return f"{self.automobilis} {self.valstybinis_nr}"
 

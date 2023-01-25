@@ -18,4 +18,7 @@
 <p><b>Modelis:</b> {{ automobilis.automobilis }}</p>
 <p><b>Valstybinis numeris:</b> {{ automobilis.valstybinis_nr }}</p>
 <p><b>VIN kodas:</b> {{ automobilis.vin_kodas }}</p>
+{% if automobilis.aprasymas %}
+<p><b>Aprasymas:</b> {{ automobilis.aprasymas | safe}}</p>
+{% endif %}
 {% endblock %}
