@@ -15,7 +15,7 @@
     </svg>
     <h3>Autoservisas</h3>
 </div>
-<nav class="navbar navbar-expand-md bg-dark navbar-dark">
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
     <div class="container-fluid">
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -42,7 +42,7 @@
                               clip-rule="evenodd"/>
                     </svg>
                     {{ user.get_username }}</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Mano uzsakymai</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'manouzsakymai' %}">Mano uzsakymai</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'logout'%}?next=/autoservice">Atsijungti</a></li>
                 {% else %}
                 <li class="nav-item"><a class="nav-link" href="{% url 'login'%}?next={{request.path}}">Prisijungti</a>

@@ -5,7 +5,8 @@
 {% block content %}
 <h2>Uzsakymo informacija</h2>
 <p><b>Data:</b> {{ uzsakymas.data }}</p>
-<p><b>Automobilis:</b> {{ uzsakymas.automobilis }}</p>
+<p><b>Automobilis:</b><a href="{% url 'automobilis' uzsakymas.automobilis.id %}">{{ uzsakymas.automobilis }}</a></p>
+<p><b>Savininkas:</b> {{ uzsakymas.automobilis.klientas }}</p>
 <p><b>Statusas:</b><span class="{% if uzsakymas.statusas == 'a' %}text-success{% elif uzsakymas.status == 't' %}text-danger{% else %}text-warning{% endif %}"> {{ uzsakymas.get_statusas_display }} </span></p>
 <table class="table table-bordered table-sm">
     <thead>

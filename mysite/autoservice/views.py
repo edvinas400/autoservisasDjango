@@ -4,6 +4,8 @@ from django.views import generic
 from .models import *
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 
 # Create your views here.
 
@@ -39,6 +41,14 @@ class UzsakymaiListView(generic.ListView):
     paginate_by = 1
     template_name = "uzsakymai.html"
     context_object_name = "uzsakymai"
+
+class UserUzsakymaiListView(generic.ListView):
+    model = Uzsakymas
+    paginate_by = 2
+    template_name = "useruzsakymai.html"
+    context_object_name = "useruzsakymai"
+    def get_queryset(self):
+        return Uzsakymas.objects.filter(vartotojas=self.request.user)
 class UzsakymaiDetailView(generic.DetailView):
     model = Uzsakymas
     template_name = "uzsakymas.html"

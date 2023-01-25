@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Uzsakymai{% endblock %}
+
+{% block content %}
+{% load static %}
+<h2>Mano uzsakymai:</h2>
+{% if useruzsakymai %}
+<ul>
+    {% for uzsakymas in useruzsakymai %}
+    <li class="{% if uzsakymas.is_overdue %}text-danger{% endif %}"><a href="{% url 'uzsakymas' uzsakymas.id %}">{{uzsakymas}} </a>
+        ({{uzsakymas.grazinimo_data}})
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>Šiuo metu uzsakymu neturite.</p>
+{% endif %}
+<div class="container">
+    <nav aria-label="...">
+        {% if page_obj.has_other_pages %}
+        <ul class="pagination pagination-sm">
+            {% for i in page_obj.paginator.page_range %}
+            {% if page_obj.number == i %}
+            <li class="page-item active">
+                <a class="page-link">{{ i }}</a>
+            </li>
+            {% else %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+            </li>
+            {% endif %}
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </nav>
+</div>
+{% endblock %}
