@@ -34,7 +34,7 @@ class Automobilis(models.Model):
 
 
 class Uzsakymas(models.Model):
-    data = models.DateTimeField("Data")
+    data = models.DateTimeField("Data", auto_now_add=True)
     automobilis = models.ForeignKey("Automobilis", on_delete=models.CASCADE)
     vartotojas = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     grazinimo_data = models.DateField("Grazinimo data")
@@ -94,3 +94,15 @@ class UzsakymoEilute(models.Model):
     class Meta:
         verbose_name = "Uzsakymo eilute"
         verbose_name_plural = "Uzsakymo eilutes"
+
+
+class UzsakymoReview(models.Model):
+    uzsakymas = models.ForeignKey('Uzsakymas', on_delete=models.SET_NULL, null=True, blank=True, related_name="reviews")
+    reviewer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    content = models.TextField('Atsiliepimas', max_length=2000)
+
+    class Meta:
+        verbose_name = "Atsiliepimas"
+        verbose_name_plural = 'Atsiliepimai'
+        ordering = ['-date_created']

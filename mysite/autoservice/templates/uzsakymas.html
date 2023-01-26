@@ -7,29 +7,54 @@
 <p><b>Data:</b> {{ uzsakymas.data }}</p>
 <p><b>Automobilis:</b><a href="{% url 'automobilis' uzsakymas.automobilis.id %}">{{ uzsakymas.automobilis }}</a></p>
 <p><b>Savininkas:</b> {{ uzsakymas.automobilis.klientas }}</p>
-<p><b>Statusas:</b><span class="{% if uzsakymas.statusas == 'a' %}text-success{% elif uzsakymas.status == 't' %}text-danger{% else %}text-warning{% endif %}"> {{ uzsakymas.get_statusas_display }} </span></p>
+<p><b>Statusas:</b><span
+        class="{% if uzsakymas.statusas == 'a' %}text-success{% elif uzsakymas.status == 't' %}text-danger{% else %}text-warning{% endif %}"> {{ uzsakymas.get_statusas_display }} </span>
+</p>
 <table class="table table-bordered table-sm">
     <thead>
-      <tr>
+    <tr>
         <th><b>Paslauga</b></th>
         <th><b>Paslaugos kaina</b></th>
         <th><b>Kiekis</b></th>
-          <th><b>Suma</b></th>
-      </tr>
+        <th><b>Suma</b></th>
+    </tr>
     </thead>
     <tbody>
     {% for eilute in uzsakymas.eilutes.all %}
-      <tr>
+    <tr>
         <td>{{eilute.paslauga}}</td>
         <td>{{eilute.paslauga.kaina}}</td>
         <td>{{eilute.kiekis}}</td>
-          <td>{{eilute.display_kaina}}</td>
-      </tr>
+        <td>{{eilute.display_kaina}}</td>
+    </tr>
     {% endfor %}
-      <tr>
-        <td colspan = 3><b>Bendra suma:</b></td>
-          <td>{{ uzsakymas.display_suma }}</td>
-      </tr>
+    <tr>
+        <td colspan=3><b>Bendra suma:</b></td>
+        <td>{{ uzsakymas.display_suma }}</td>
+    </tr>
     </tbody>
-  </table>
+</table>
+</br>
+<h4>Atsiliepimai:</h4>
+{% if uzsakymas.reviews.all %}
+{% for review in uzsakymas.reviews.all %}
+<hr>
+<strong>{{ review.reviewer }}</strong>, <em>{{ review.date_created}}</em>
+<p>{{ review.content }}</p>
+{% endfor %}
+{% else %}
+<p>Uzsakymas neturi atsiliepimų</p>
+{% endif %}
+{% if user.is_authenticated %}
+<div class="fieldWrapper">
+    <hr>
+    <br/>
+    <h4>Palikite atsiliepimą:</h4>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.content }}</br>
+        <input type="submit" value="Išsaugoti">
+    </form>
+</div>
+{% endif %}
 {% endblock %}

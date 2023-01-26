@@ -25,6 +25,9 @@ class UzsakymoEiluteAdmin(admin.ModelAdmin):
 class PaslaugaAdmin(admin.ModelAdmin):
     list_display = ("pavadinimas", "kaina")
 
+class UzsakymoReviewAdmin(admin.ModelAdmin):
+    list_display = ('uzsakymas', 'date_created', 'reviewer', 'content')
+
 
 # Register your models here.
 admin.site.register(models.AutomobilioModelis)
@@ -32,3 +35,4 @@ admin.site.register(models.Automobilis, AutomobilisAdmin)
 admin.site.register(models.Uzsakymas, UzsakymasAdmin)
 admin.site.register(models.Paslauga, PaslaugaAdmin)
 admin.site.register(models.UzsakymoEilute, UzsakymoEiluteAdmin)
+admin.site.register(models.UzsakymoReview, UzsakymoReviewAdmin)
