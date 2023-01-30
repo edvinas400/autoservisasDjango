@@ -1,6 +1,6 @@
 from django.shortcuts import reverse, redirect, render, get_object_or_404
 from django.http import HttpResponse
-from .forms import UzsakymoReviewForm
+from .forms import UzsakymoReviewForm, UserUpdateForm, ProfilisUpdateForm
 from django.views import generic
 from django.views.generic.edit import FormMixin
 from .models import *
@@ -10,6 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import User
 from django.views.decorators.csrf import csrf_protect
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -106,3 +107,26 @@ def register(request):
             messages.error(request, 'Slaptažodžiai nesutampa!')
             return redirect('register')
     return render(request, 'register.html')
+
+@login_required
+def profilis(request):
+    return render(request, 'profilis.html')
+@login_required
+def editprofile(request):
+    if request.method == "POST":
+        u_form = UserUpdateForm(request.POST, instance=request.user)
+        p_form = ProfilisUpdateForm(request.POST, request.FILES, instance=request.user.profilis)
+        if u_form.is_valid() and p_form.is_valid():
+            u_form.save()
+            p_form.save()
+            messages.success(request, f"Profilis atnaujintas")
+            return redirect('profilis')
+    else:
+        u_form = UserUpdateForm(instance=request.user)
+        p_form = ProfilisUpdateForm(instance=request.user.profilis)
+
+    context = {
+        'u_form': u_form,
+        'p_form': p_form,
+    }
+    return render(request, 'editprofile.html', context)

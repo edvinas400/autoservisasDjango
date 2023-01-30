@@ -10,11 +10,7 @@
     {% for uzsakymas in uzsakymai %}
     <div class="col-md-4 d-flex align-items-stretch">
         <div>
-            {% if uzsakymas.automobilis.cover %}
-            <img src="{{ uzsakymas.automobilis.cover.url }}" class="card-img-top" alt="...">
-            {% else %}
-            <img src="{% static 'img/no-image.png' %}" class="card-img-top">
-            {% endif %}
+            <img src="{{ uzsakymas.vartotojas.profilis.foto.url }}" class="card-img-top" alt="...">
         </div>
     </div>
     <li><a href="{{ uzsakymas.id }}">{{uzsakymas}}</a></li>

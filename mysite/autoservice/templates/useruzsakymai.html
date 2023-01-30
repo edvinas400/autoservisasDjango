@@ -8,6 +8,7 @@
 {% if useruzsakymai %}
 <ul>
     {% for uzsakymas in useruzsakymai %}
+    <img class="rounded-circle" src="{{uzsakymas.vartotojas.profilis.foto.url}}">
     <li class="{% if uzsakymas.is_overdue %}text-danger{% endif %}"><a href="{% url 'uzsakymas' uzsakymas.id %}">{{uzsakymas}} </a>
         ({{uzsakymas.grazinimo_data}})
     </li>
