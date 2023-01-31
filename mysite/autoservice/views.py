@@ -1,16 +1,17 @@
 from django.shortcuts import reverse, redirect, render, get_object_or_404
 from django.http import HttpResponse
-from .forms import UzsakymoReviewForm, UserUpdateForm, ProfilisUpdateForm
+from .forms import UzsakymoReviewForm, UserUpdateForm, ProfilisUpdateForm, UserUzsakymasCreateForm
 from django.views import generic
 from django.views.generic.edit import FormMixin
 from .models import *
 from django.core.paginator import Paginator
 from django.db.models import Q
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.forms import User
 from django.views.decorators.csrf import csrf_protect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+import datetime
 
 # Create your views here.
 
@@ -47,7 +48,54 @@ class UzsakymaiListView(generic.ListView):
     template_name = "uzsakymai.html"
     context_object_name = "uzsakymai"
 
-class UserUzsakymaiListView(generic.ListView):
+class UserUzsakymasCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Uzsakymas
+    # fields = ['data', 'automobilis']
+    success_url = "/autoservice/manouzsakymai/"
+    template_name = 'usernewuzsakymas.html'
+    form_class = UserUzsakymasCreateForm
+
+    def form_valid(self, form):
+        form.instance.vartotojas = self.request.user
+        form.instance.grazinimo_data = form.instance.data + datetime.timedelta(days=7)
+        return super().form_valid(form)
+class UserUzsakymoEiluteCreateView(LoginRequiredMixin, generic.CreateView):
+    model = UzsakymoEilute
+    fields = ['paslauga', 'kiekis']
+    template_name = 'addeilute.html'
+
+    def get_success_url(self):
+        return reverse('uzsakymas', args=(self.object.uzsakymas.id,))
+    def form_valid(self, form):
+        form.instance.uzsakymas = Uzsakymas.objects.get(pk=self.kwargs['pk'])
+        return super().form_valid(form)
+
+class UserUzsakymasUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
+    model = Uzsakymas
+    # fields = ['data', 'automobilis']
+    success_url = "/autoservice/manouzsakymai/"
+    template_name = 'usernewuzsakymas.html'
+    form_class = UserUzsakymasCreateForm
+
+    def form_valid(self, form):
+        form.instance.vartotojas = self.request.user
+        form.instance.grazinimo_data = form.instance.data + datetime.timedelta(days=7)
+        return super().form_valid(form)
+
+    def test_func(self):
+        uzsakymas = self.get_object()
+        return self.request.user == uzsakymas.vartotojas
+
+class UserUzsakymasDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
+    model = Uzsakymas
+    success_url = "/autoservice/manouzsakymai/"
+    template_name = 'deleteuzsakymas.html'
+
+    def test_func(self):
+        uzsakymas = self.get_object()
+        return self.request.user == uzsakymas.vartotojas
+
+class UserUzsakymaiListView(LoginRequiredMixin, generic.ListView):
     model = Uzsakymas
     paginate_by = 2
     template_name = "useruzsakymai.html"

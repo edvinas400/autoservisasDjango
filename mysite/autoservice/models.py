@@ -35,10 +35,10 @@ class Automobilis(models.Model):
 
 
 class Uzsakymas(models.Model):
-    data = models.DateTimeField("Data", auto_now_add=True)
+    data = models.DateTimeField("Data", null=True, blank=True)
     automobilis = models.ForeignKey("Automobilis", on_delete=models.CASCADE)
     vartotojas = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
-    grazinimo_data = models.DateField("Grazinimo data")
+    grazinimo_data = models.DateField("Grazinimo data", null = True, blank=True)
 
     def is_overdue(self):
         return self.grazinimo_data and date.today() > self.grazinimo_data

@@ -4,12 +4,23 @@
 
 {% block content %}
 <h2>Uzsakymo informacija</h2>
+{% if uzsakymas.vartotojas == user %}
+<div>
+    <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'updateuzsakymas' uzsakymas.id %}">Redaguoti</a>
+    <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'deleteuzsakymas' uzsakymas.id %}">Ištrinti</a>
+</div>
+{% endif %}
 <p><b>Data:</b> {{ uzsakymas.data }}</p>
 <p><b>Automobilis:</b><a href="{% url 'automobilis' uzsakymas.automobilis.id %}">{{ uzsakymas.automobilis }}</a></p>
 <p><b>Savininkas:</b> {{ uzsakymas.automobilis.klientas }}</p>
 <p><b>Statusas:</b><span
         class="{% if uzsakymas.statusas == 'a' %}text-success{% elif uzsakymas.status == 't' %}text-danger{% else %}text-warning{% endif %}"> {{ uzsakymas.get_statusas_display }} </span>
 </p>
+{% if uzsakymas.vartotojas == user %}
+<div>
+    <a class="btn btn-dark btn-sm mt-1 mb-1" href="{% url 'addeilute' uzsakymas.id %}">Prideti uzsakymo eilute</a>
+</div>
+{% endif %}
 <table class="table table-bordered table-sm">
     <thead>
     <tr>
