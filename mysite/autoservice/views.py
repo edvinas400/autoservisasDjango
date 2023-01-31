@@ -13,12 +13,13 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 import datetime
 
+
 # Create your views here.
 
 def index(request):
     paslaugu_kiekis = Paslauga.objects.count()
     uzsakymu_kiekis = Uzsakymas.objects.count()
-    atlikti_uzsakymai = Uzsakymas.objects.filter(statusas__exact = "a").count()
+    atlikti_uzsakymai = Uzsakymas.objects.filter(statusas__exact="a").count()
     automobiliu_kiekis = Automobilis.objects.count()
     num_visits = request.session.get("num_visits", 1)
     request.session["num_visits"] = num_visits + 1
@@ -28,25 +29,32 @@ def index(request):
         'uzsakymu_kiekis': uzsakymu_kiekis,
         'atlikti_uzsakymai': atlikti_uzsakymai,
         'automobiliu_kiekis': automobiliu_kiekis,
-        "vizitai" : num_visits,
+        "vizitai": num_visits,
     }
     return render(request, 'index.html', context=informacija)
+
+
 def automobiliai(request):
     paginator = Paginator(Automobilis.objects.all(), 1)
     page_number = request.GET.get("page")
     automobiliai = paginator.get_page(page_number)
     context = {
-        "automobiliai" : automobiliai
+        "automobiliai": automobiliai
     }
     return render(request, "automobiliai.html", context=context)
+
+
 def automobilis(request, automobilis_id):
     automobilis = get_object_or_404(Automobilis, pk=automobilis_id)
     return render(request, "automobilis.html", {"automobilis": automobilis})
+
+
 class UzsakymaiListView(generic.ListView):
     model = Uzsakymas
     paginate_by = 1
     template_name = "uzsakymai.html"
     context_object_name = "uzsakymai"
+
 
 class UserUzsakymasCreateView(LoginRequiredMixin, generic.CreateView):
     model = Uzsakymas
@@ -59,6 +67,8 @@ class UserUzsakymasCreateView(LoginRequiredMixin, generic.CreateView):
         form.instance.vartotojas = self.request.user
         form.instance.grazinimo_data = form.instance.data + datetime.timedelta(days=7)
         return super().form_valid(form)
+
+
 class UserUzsakymoEiluteCreateView(LoginRequiredMixin, generic.CreateView):
     model = UzsakymoEilute
     fields = ['paslauga', 'kiekis']
@@ -66,9 +76,11 @@ class UserUzsakymoEiluteCreateView(LoginRequiredMixin, generic.CreateView):
 
     def get_success_url(self):
         return reverse('uzsakymas', args=(self.object.uzsakymas.id,))
+
     def form_valid(self, form):
         form.instance.uzsakymas = Uzsakymas.objects.get(pk=self.kwargs['pk'])
         return super().form_valid(form)
+
 
 class UserUzsakymasUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
     model = Uzsakymas
@@ -86,6 +98,7 @@ class UserUzsakymasUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.U
         uzsakymas = self.get_object()
         return self.request.user == uzsakymas.vartotojas
 
+
 class UserUzsakymasDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
     model = Uzsakymas
     success_url = "/autoservice/manouzsakymai/"
@@ -95,13 +108,17 @@ class UserUzsakymasDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.D
         uzsakymas = self.get_object()
         return self.request.user == uzsakymas.vartotojas
 
+
 class UserUzsakymaiListView(LoginRequiredMixin, generic.ListView):
     model = Uzsakymas
     paginate_by = 2
     template_name = "useruzsakymai.html"
     context_object_name = "useruzsakymai"
+
     def get_queryset(self):
         return Uzsakymas.objects.filter(vartotojas=self.request.user)
+
+
 class UzsakymaiDetailView(FormMixin, generic.DetailView):
     model = Uzsakymas
     template_name = "uzsakymas.html"
@@ -110,6 +127,7 @@ class UzsakymaiDetailView(FormMixin, generic.DetailView):
 
     def get_success_url(self):
         return reverse("uzsakymas", kwargs={"pk": self.object.id})
+
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         form = self.get_form()
@@ -117,16 +135,22 @@ class UzsakymaiDetailView(FormMixin, generic.DetailView):
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
+
     def form_valid(self, form):
         form.instance.uzsakymas = self.object
         form.instance.reviewer = self.request.user
         form.save()
         return super(UzsakymaiDetailView, self).form_valid(form)
 
+
 def search(request):
     query = request.GET.get('query')
-    search_results = Automobilis.objects.filter(Q(klientas__icontains=query) | Q(automobilis__marke__icontains=query) | Q(automobilis__modelis__icontains=query) | Q(vin_kodas__icontains=query) | Q(valstybinis_nr__icontains=query))
+    search_results = Automobilis.objects.filter(
+        Q(klientas__icontains=query) | Q(automobilis__marke__icontains=query) | Q(
+            automobilis__modelis__icontains=query) | Q(vin_kodas__icontains=query) | Q(valstybinis_nr__icontains=query))
     return render(request, 'search.html', {'automobiliai': search_results, 'query': query})
+
+
 @csrf_protect
 def register(request):
     if request.method == "POST":
@@ -156,9 +180,12 @@ def register(request):
             return redirect('register')
     return render(request, 'register.html')
 
+
 @login_required
 def profilis(request):
     return render(request, 'profilis.html')
+
+
 @login_required
 def editprofile(request):
     if request.method == "POST":
