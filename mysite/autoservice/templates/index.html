@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 
 {% block title %}HOME{% endblock %}
-
+{% load i18n %}
 {% block content %}
-<h2>Informacija</h2>
+<h2>{% trans "Info" %}</h2>
 <ul>
-    <li>Paslaugu: {{ paslaugu_kiekis }}</li>
-    <li>Uzsakymu: {{ uzsakymu_kiekis }}</li>
-    <li>Atliktu uzsakymu: {{ atlikti_uzsakymai }}</li>
-    <li>Automobiliu: {{ automobiliu_kiekis }}</li>
-    <li>Jus cia lankotes {{vizitai}} -a karta.</li>
+    <li>{% trans "Number of services" %}: {{ paslaugu_kiekis }}</li>
+    <li>{% trans "Number of orders" %}: {{ uzsakymu_kiekis }}</li>
+    <li>{% trans "Number of completed orders" %}: {{ atlikti_uzsakymai }}</li>
+    <li>{% blocktrans %} Number of cars: {{ automobiliu_kiekis }}</li>
+    <li>Your visits: {{vizitai}} </li>{% endblocktrans %}
 </ul>
 {% endblock %}
